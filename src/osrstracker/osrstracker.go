@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-// Player stat on highscores
+// PlayerStat on highscores
 type PlayerStat struct {
 	Level int64
 	XP    int64
