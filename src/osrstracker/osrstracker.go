@@ -15,10 +15,13 @@ type PlayerStat struct {
 	Rank  int64
 }
 
+// PlayerStats map of all stats
+type PlayerStats = map[string]PlayerStat
+
 // GetHighscores fetch player highscores
-func GetHighscores(playerName string) map[string]PlayerStat {
-	stats := make(map[string]PlayerStat)
-	skillNames := [23]string{
+func GetHighscores(playerName string) PlayerStats {
+	stats := make(PlayerStats)
+	skillNames := [24]string{
 		"attack", "defence", "strength",
 		"hitpoints", "ranged", "prayer",
 		"magic", "cooking", "woodcutting",
@@ -35,6 +38,7 @@ func GetHighscores(playerName string) map[string]PlayerStat {
 	}
 
 	scanner := bufio.NewScanner(resp.Body)
+	i := 0
 
 	for scanner.Scan() {
 		str := strings.Trim(scanner.Text(), " \n")
@@ -48,14 +52,14 @@ func GetHighscores(playerName string) map[string]PlayerStat {
 		level, _ := strconv.ParseInt(tokens[1], 10, 64)
 		xp, _ := strconv.ParseInt(tokens[2], 10, 64)
 
-		for i := 0; i < 23; i++ {
-			skillName := skillNames[i]
-			stats[skillName] = PlayerStat{Rank: rank, Level: level, XP: xp}
-		}
+		skillName := skillNames[i]
+		stat := PlayerStat{Rank: rank, Level: level, XP: xp}
+		stats[skillName] = stat
 
-		fmt.Printf(scanner.Text() + "\n")
+		i++
 	}
 
+	fmt.Printf("%+v\n", stats)
 	return stats
 }
 
