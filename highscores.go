@@ -10,19 +10,22 @@ import (
 	"strings"
 )
 
-// SkillStat on high scores
-type SkillStat struct {
+// PlayerStat on high scores
+type PlayerStat struct {
+	Name  string
 	Level int64
 	XP    int64
 	Rank  int64
 }
 
-// PlayerStats map of all stats
-type PlayerStats = map[string]SkillStat
+func (stat *PlayerStat) display()  {
+	fmt.Printf("%-14vRank: %-12v XP: %-12v Level: %v\n",
+				stat.Name, stat.Rank, stat.XP, stat.Level)
+}
 
 // GetHighscores fetch player highscores
-func GetHighscores(playerName string) PlayerStats {
-	stats := make(PlayerStats)
+func GetHighscores(playerName string) []PlayerStat {
+	var stats []PlayerStat
 	resp, err := http.Get("https://secure.runescape.com/m=hiscore_oldschool/index_lite.ws?player=" + playerName)
 
 	if resp == nil ||  err != nil {
@@ -47,18 +50,11 @@ func GetHighscores(playerName string) PlayerStats {
 		xp, _ := strconv.ParseInt(tokens[2], 10, 64)
 
 		skillName := HiscoreResult[i]
-		stat := SkillStat{Rank: rank, Level: level, XP: xp}
-		stats[skillName] = stat
+		stat := PlayerStat{Name: skillName, Rank: rank, Level: level, XP: xp}
+		stats = append(stats, stat)
 
 		i++
 	}
 
 	return stats
-}
-
-func display(stats PlayerStats)  {
-	for key := range stats {
-		stat := stats[key]
-		fmt.Printf("%-14vRank: %-12v XP: %-12v Level: %v\n", key, stat.Rank, stat.XP, stat.Level)
-	}
 }

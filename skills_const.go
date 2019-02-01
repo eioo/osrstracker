@@ -37,15 +37,3 @@ var HiscoreResult = map[int]string{
 	32: "lastManStanding",
 	*/
 }
-
-/*
-func skillToId(skillName string) int {
-	for i, val := range HiscoreResult {
-		if val == skillName {
-			return i
-		}
-	}
-
-	return -1
-}
-*/

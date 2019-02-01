@@ -9,7 +9,10 @@ import (
 func trackPlayer(playerName *string) {
 	fmt.Println("Tracking OSRS player:", *playerName)
 	stats := GetHighscores(*playerName)
-	display(stats)
+
+	for _, stat := range stats {
+		stat.display()
+	}
 }
 
 func main() {
