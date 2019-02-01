@@ -12,11 +12,13 @@ import (
 
 // PlayerStat on high scores
 type PlayerStat struct {
-	Name  string
-	Level int64
-	XP    int64
-	Rank  int64
+	Name  string `json:"name"`
+	Level int64  `json:"lvl"`
+	XP    int64  `json:"xp"`
+	Rank  int64  `json:"rank"`
 }
+
+type PlayerStats = []PlayerStat
 
 func (stat *PlayerStat) display()  {
 	fmt.Printf("%-14vRank: %-12v XP: %-12v Level: %v\n",
@@ -24,8 +26,8 @@ func (stat *PlayerStat) display()  {
 }
 
 // GetHighscores fetch player highscores
-func GetHighscores(playerName string) []PlayerStat {
-	var stats []PlayerStat
+func GetHighscores(playerName string) PlayerStats {
+	var stats PlayerStats
 	resp, err := http.Get("https://secure.runescape.com/m=hiscore_oldschool/index_lite.ws?player=" + playerName)
 
 	if resp == nil ||  err != nil {
