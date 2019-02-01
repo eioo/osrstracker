@@ -3,7 +3,9 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"log"
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
 )
@@ -23,8 +25,9 @@ func GetHighscores(playerName string) PlayerStats {
 	stats := make(PlayerStats)
 	resp, err := http.Get("https://secure.runescape.com/m=hiscore_oldschool/index_lite.ws?player=" + playerName)
 
-	if err != nil {
-		// we are banned
+	if resp == nil ||  err != nil {
+		log.Printf("Failed to fetch highscore for \"%s\"", playerName)
+		os.Exit(0)
 	}
 
 	scanner := bufio.NewScanner(resp.Body)
