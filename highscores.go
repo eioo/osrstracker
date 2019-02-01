@@ -2,7 +2,6 @@ package main
 
 import (
 	"bufio"
-	"flag"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -58,20 +57,5 @@ func display(stats PlayerStats)  {
 	for key := range stats {
 		stat := stats[key]
 		fmt.Printf("%-14vRank: %-12v XP: %-12v Level: %v\n", key, stat.Rank, stat.XP, stat.Level)
-	}
-}
-
-func trackPlayer(playerName *string) {
-	fmt.Println("Tracking OSRS player:", *playerName)
-	stats := GetHighscores(*playerName)
-	display(stats)
-}
-
-func main() {
-	trackPtr := flag.String("track", "", "track player")
-	flag.Parse()
-
-	if *trackPtr != "" {
-		trackPlayer(trackPtr)
 	}
 }
