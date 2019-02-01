@@ -21,7 +21,7 @@ func createDirectory(path string) {
 	}
 }
 
-func writeToFile(path string, content *[] byte) {
+func writeToFile(path string, content *[]byte) {
 	var _, err = os.Stat(path)
 
 	if os.IsNotExist(err) {
@@ -44,7 +44,13 @@ func writeToFile(path string, content *[] byte) {
 		log.Printf("Failed to open log file \"%s\"", path)
 		os.Exit(0)
 	}
-	defer file.Close()
+
+	defer func() {
+		if closeErr := file.Close(); closeErr != nil {
+			log.Printf("Failed to close log file \"%s\"", path)
+			os.Exit(0)
+		}
+	}()
 
 	// write some text line-by-line to file
 	_, err = file.Write(*content)
